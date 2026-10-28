@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTrack | Student Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app">
+
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-icon">E</span>
+        <span>EduTrack</span>
+      </a>
+
+      <div class="profile">
+        <div class="avatar purple">ST</div>
+        <div>
+          <strong>Student Admin</strong>
+          <small>Administrator</small>
+        </div>
+      </div>
+
+      <p class="nav-label">MAIN MENU</p>
+      <nav>
+        <a class="nav-link active" href="#dashboard">
+          <span>▦</span> Dashboard
+        </a>
+        <a class="nav-link" href="#students">
+          <span>♙</span> Students
+        </a>
+        <a class="nav-link" href="#attendance">
+          <span>◷</span> Attendance
+        </a>
+        <a class="nav-link" href="#performance">
+          <span>▥</span> Performance
+        </a>
+        <a class="nav-link" href="#events">
+          <span>▣</span> Events
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <span>💡</span>
+          <strong>Need help?</strong>
+          <p>Manage your student records easily.</p>
+        </div>
+        <small>EduTrack v1.0</small>
+      </div>
+    </aside>
+
+    <main class="main" id="dashboard">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+
+        <div class="search-box">
+          <span>⌕</span>
+          <input id="searchInput" type="search"
+                 placeholder="Search students...">
+        </div>
+
+        <div class="top-actions">
+          <span class="today" id="today"></span>
+          <div class="avatar purple">ST</div>
+        </div>
+      </header>
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">OVERVIEW</p>
+          <h1>Dashboard</h1>
+          <p class="muted">Welcome back! Here's your student progress overview.</p>
+        </div>
+        <button class="primary-btn" id="addBtn">＋ Add Student</button>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Total Students</span>
+            <span class="stat-icon violet">♙</span>
+          </div>
+          <h2 id="totalStudents">0</h2>
+          <p class="muted">Registered students</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Average Attendance</span>
+            <span class="stat-icon green">◷</span>
+          </div>
+          <h2 id="avgAttendance">0%</h2>
+          <p class="muted">Across all students</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Average Marks</span>
+            <span class="stat-icon orange">★</span>
+          </div>
+          <h2 id="avgMarks">0%</h2>
+          <p class="muted">Academic performance</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Needs Attention</span>
+            <span class="stat-icon pink">!</span>
+          </div>
+          <h2 id="needsAttention">0</h2>
+          <p class="muted">Attendance below 75%</p>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel chart-panel" id="attendance">
+          <div class="panel-heading">
+            <div>
+              <h3>Attendance Overview</h3>
+              <p class="muted">Average attendance distribution</p>
+            </div>
+            <span class="pill">Live data</span>
+          </div>
+          <div class="donut-wrap">
+            <canvas id="attendanceChart"></canvas>
+            <div class="donut-center">
+              <strong id="chartAttendance">0%</strong>
+              <span>Attendance</span>
+            </div>
+          </div>
+          <div class="legend">
+            <span><i class="dot green-dot"></i> Present</span>
+            <span><i class="dot red-dot"></i> Low attendance</span>
+          </div>
+        </article>
+
+        <article class="panel chart-panel" id="performance">
+          <div class="panel-heading">
+            <div>
+              <h3>Academic Performance</h3>
+              <p class="muted">Marks by student</p>
+            </div>
+          </div>
+          <div class="bar-wrap">
+            <canvas id="marksChart"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="dashboard-grid lower-grid">
+        <article class="panel students-panel" id="students">
+          <div class="panel-heading">
+            <div>
+              <h3>Student Records</h3>
+              <p class="muted">Manage your student information</p>
+            </div>
+            <button class="text-btn" id="refreshBtn">↻ Refresh</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>STUDENT</th>
+                  <th>ROLL NO.</th>
+                  <th>COURSE</th>
+                  <th>ATTENDANCE</th>
+                  <th>MARKS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="studentList">
+                <tr>
+                  <td colspan="6" class="empty">Loading students...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-footer" id="tableCount">0 students</p>
+        </article>
+
+        <div class="right-column">
+          <article class="panel" id="events">
+            <div class="panel-heading">
+              <h3>Upcoming Events</h3>
+              <span class="stat-icon violet">▣</span>
+            </div>
+            <div class="event">
+              <div class="event-date">
+                <strong>05</strong><span>NOV</span>
+              </div>
+              <div>
+                <strong>Assignment Review</strong>
+                <p class="muted">Academic progress review</p>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-date orange-date">
+                <strong>10</strong><span>NOV</span>
+              </div>
+              <div>
+                <strong>Project Presentation</strong>
+                <p class="muted">Student project showcase</p>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-date green-date">
+                <strong>15</strong><span>NOV</span>
+              </div>
+              <div>
+                <strong>Monthly Assessment</strong>
+                <p class="muted">Marks and performance review</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel notice-panel">
+            <div class="panel-heading">
+              <h3>Quick Note</h3>
+              <span>✦</span>
+            </div>
+            <p class="muted">
+              Review students with low attendance and help them improve
+              their academic progress.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        <p>© 2026 EduTrack · Student Progress Management</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add student modal -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <section class="modal" role="dialog"
+             aria-modal="true" aria-labelledby="modalTitle">
+      <div class="panel-heading">
+        <div>
+          <h3 id="modalTitle">Add New Student</h3>
+          <p class="muted">Enter the student details below.</p>
+        </div>
+        <button class="close-btn" id="closeBtn" aria-label="Close">×</button>
+      </div>
+
+      <form id="studentForm">
+        <label>
+          Student Name
+          <input name="name" placeholder="Enter full name" required>
+        </label>
+        <label>
+          Email Address
+          <input name="email" type="email"
+                 placeholder="student@example.com" required>
+        </label>
+        <label>
+          Roll Number
+          <input name="rollNumber" placeholder="e.g. ST101" required>
+        </label>
+        <label>
+          Course
+          <input name="course" placeholder="e.g. BCA" required>
+        </label>
+        <label>
+          Attendance (%)
+          <input name="attendance" type="number" min="0" max="100"
+                 value="0" required>
+        </label>
+        <label>
+          Marks (%)
+          <input name="marks" type="number" min="0" max="100"
+                 value="0" required>
+        </label>
+        <p id="formMessage" role="status"></p>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="cancelBtn">
+            Cancel
+          </button>
+          <button type="submit" class="primary-btn">Save Student</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</body>
+</html>
